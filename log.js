@@ -86,9 +86,8 @@ function log(a) {
 
 //if (typeof console == "undefined"){
     window.console = {};
-    window.console.log = function (v) {
-        log(v);
-    }
+    window.console.log = log;
+    window._log = log;
 //}
 })();
 
