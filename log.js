@@ -1,5 +1,16 @@
+/**
+ * 移动浏览器控制台
+ * @author jiazheng
+ */
 (function () {
-function parse(a, flag) {
+
+/**
+ * 将数据进行字符串化，最用用于控制台输出
+ * @param {Mix} 用于展示的数据
+ * @param {boolean} 标志位用于处理JSON内部的字符串，如果是true表示是JSON内部字符串，需要加引号输出
+ * @return {string} 返回数据的字符串结果
+ */
+function stringify(a, flag) {
     var s = "";
     if (a && a.constructor == Array) {
         s = "[" + a.join(", ") + "]";
@@ -11,7 +22,7 @@ function parse(a, flag) {
         } else {
             s = "{";
             for (var i in a) {
-                s = s + i + ":" + parse(a[i], true) + ",";
+                s = s + i + ":" + stringify(a[i], true) + ",";
             }
             s = s.substr(0, s.length - 1) + "}";
         }
@@ -23,10 +34,18 @@ function parse(a, flag) {
     return s;
 }
 
+/**
+ * 获取id对应的元素
+ * @param {string} 元素id
+ * @return {HTMLElement} 元素实例
+ */
 function G(id) {
     return document.getElementById(id);
 }
 
+/**
+ * 添加控制台面板到页面
+ */
 function addPanel() {
     var panel = document.createElement("div");
     panel.id = "panel";
@@ -52,15 +71,30 @@ function addPanel() {
     btn.style.position = "absolute";
     btn.style.right = "0px";
     btn.style.top = "0px";
-    btn.style.width = "40px";
     btn.onclick = function () {
         G("panel").innerHTML = "";
     }
+    panel.appendChild(btn);
     if (document && document.body) {
-        document.body.appendChild(btn);
+        document.body.appendChild(panel);
+        if (log._content.length > 0) {
+            for (var i = 0; i < log._content.length; i ++) {
+                log(log._content[i]);
+            }
+            delete log._content;
+        }
+    } else {
+        addEvent(window, 'load', function(){
+            addPanel();
+        });
     }
 }
-
+/**
+ * 添加事件处理函数
+ * @param {HTMLElement} 绑定事件监听的元素
+ * @param {string} 事件类型
+ * @param {Function} 监听函数
+ */
 function addEvent(elem, type, handler) {
     if (!elem) {
         return;
@@ -72,23 +106,27 @@ function addEvent(elem, type, handler) {
     }
 }
 
-addPanel();
-
 function log(a) {
-    var p = document.getElementById("panel");
+    var p = G("panel");
     var div = document.createElement("div");
-    div.innerHTML = parse(a);
+    div.innerHTML = stringify(a);
     if (p) {
         p.appendChild(div);
         p.scrollTop = 99999;
+    } else {
+        // 面板尚未准备好，缓存起来
+        log._content.push(a);
     }
 }
+
+log._content = [];
 
 //if (typeof console == "undefined"){
     window.console = {};
     window.console.log = log;
-    window._log = log;
 //}
+// 添加面板
+addPanel();
 })();
 
 
