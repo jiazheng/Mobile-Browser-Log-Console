@@ -54,7 +54,7 @@ function addPanel() {
     s.top = "0px";
     s.right = "0px";
     s.border = "1px solid black";
-    s.background = "white";
+    s.background = "rgba(255, 255, 255, .5)";
     s.width = "140px";
     s.height = "200px";
     s.fontSize = "11px";
@@ -71,6 +71,7 @@ function addPanel() {
     btn.style.position = "absolute";
     btn.style.right = "0px";
     btn.style.top = "0px";
+    btn.style.opacity = '0.5';
     btn.onclick = function () {
         G("panel").innerHTML = "";
     }
