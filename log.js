@@ -53,7 +53,7 @@ function addPanel() {
     s.position = "absolute";
     s.top = "0px";
     s.right = "0px";
-    s.border = "1px solid black";
+    s.border = "1px solid rgba(0, 0, 0, .6)";
     s.background = "rgba(255, 255, 255, .5)";
     s.width = "140px";
     s.height = "200px";
